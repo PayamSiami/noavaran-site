@@ -1,13 +1,13 @@
 'use client';
 
 import { motion, useInView } from 'framer-motion';
-import { useRef, useState, useMemo } from 'react';
-import { 
-  Globe, 
-  Smartphone, 
-  Database, 
-  Cloud, 
-  Code, 
+import { useRef, useState } from 'react';
+import {
+  Globe,
+  Smartphone,
+  Database,
+  Cloud,
+  Code,
   Users,
   ArrowLeft,
   Sparkles,
@@ -107,30 +107,33 @@ const services = [
   },
 ];
 
-// Tech Icons for decoration
+// Tech Icons for decoration - ✅ Use fixed positions with specific values
 const techIcons = [
-  Braces, Terminal, GitBranch, Server, 
+  Braces, Terminal, GitBranch, Server,
   Layout, Palette, Cpu, Network, Binary, Layers
 ];
 
-// ✅ Generate static positions at module level (runs once)
-const TECH_POSITIONS = techIcons.map(() => ({
-  x: Math.random() * 100,
-  y: Math.random() * 100,
-  rotate: Math.random() * 360,
-  size: 30 + Math.random() * 40,
-  duration: 40 + Math.random() * 20,
-  yDuration: 15 + Math.random() * 10,
-  opacity: 0.03 + Math.random() * 0.03
-}));
+// ✅ Use fixed positions - no Math.random()
+const TECH_POSITIONS = [
+  { x: 15, y: 25, rotate: 45, size: 40, opacity: 0.04 },
+  { x: 85, y: 15, rotate: 120, size: 35, opacity: 0.035 },
+  { x: 45, y: 75, rotate: 200, size: 50, opacity: 0.045 },
+  { x: 75, y: 85, rotate: 300, size: 30, opacity: 0.03 },
+  { x: 25, y: 55, rotate: 80, size: 45, opacity: 0.05 },
+  { x: 65, y: 45, rotate: 180, size: 55, opacity: 0.025 },
+  { x: 35, y: 15, rotate: 250, size: 38, opacity: 0.04 },
+  { x: 55, y: 65, rotate: 15, size: 42, opacity: 0.035 },
+  { x: 5, y: 45, rotate: 330, size: 48, opacity: 0.03 },
+  { x: 95, y: 55, rotate: 90, size: 36, opacity: 0.045 },
+];
 
- const ServicesSection = () => {
+export const ServicesSection = () => {
   const [hoveredId, setHoveredId] = useState<number | null>(null);
   const sectionRef = useRef<HTMLDivElement>(null);
   const isInView = useInView(sectionRef, { once: true, amount: 0.1 });
 
   return (
-    <section 
+    <section
       ref={sectionRef}
       className="relative py-20 md:py-28 overflow-hidden"
       style={{
@@ -140,10 +143,10 @@ const TECH_POSITIONS = techIcons.map(() => ({
       {/* Animated Grid */}
       <div className="absolute inset-0">
         <div className="absolute inset-0 opacity-[0.05]"
-             style={{ 
-               backgroundImage: 'linear-gradient(rgba(255,255,255,0.02) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.02) 1px, transparent 1px)',
-               backgroundSize: '60px 60px'
-             }} 
+          style={{
+            backgroundImage: 'linear-gradient(rgba(255,255,255,0.02) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.02) 1px, transparent 1px)',
+            backgroundSize: '60px 60px'
+          }}
         />
       </div>
 
@@ -152,10 +155,10 @@ const TECH_POSITIONS = techIcons.map(() => ({
       <div className="absolute bottom-1/4 right-1/4 w-[400px] h-[400px] bg-purple-600/10 rounded-full blur-3xl animate-pulse delay-1000" />
       <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-pink-600/5 rounded-full blur-3xl" />
 
-      {/* ✅ Tech Icons - Using static positions, no animations on load */}
+      {/* ✅ Tech Icons - Using fixed positions, no random values */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
         {techIcons.map((Icon, i) => {
-          const pos = TECH_POSITIONS[i];
+          const pos = TECH_POSITIONS[i % TECH_POSITIONS.length];
           return (
             <div
               key={i}
@@ -210,7 +213,7 @@ const TECH_POSITIONS = techIcons.map(() => ({
               >
                 {/* Card Background */}
                 <div className="absolute inset-0 rounded-3xl bg-gradient-to-br from-white/5 to-white/0 backdrop-blur-sm border border-white/10 transition-all duration-500 group-hover:border-white/20 group-hover:shadow-2xl group-hover:shadow-indigo-500/10" />
-                
+
                 {/* Glow Effect */}
                 <div className={`absolute inset-0 rounded-3xl bg-gradient-to-r ${service.bgGradient} opacity-0 group-hover:opacity-100 transition-opacity duration-500`} />
 
@@ -312,7 +315,7 @@ const TECH_POSITIONS = techIcons.map(() => ({
             <Button
               variant="gradient"
               size="lg"
-              className="bg-linear-to-r from-indigo-600 to-purple-600 text-white shadow-lg shadow-indigo-500/20"
+              className="bg-gradient-to-r from-indigo-600 to-purple-600 text-white shadow-lg shadow-indigo-500/20"
               icon={<Sparkles className="w-4 h-4" />}
             >
               دریافت مشاوره رایگان
@@ -324,4 +327,4 @@ const TECH_POSITIONS = techIcons.map(() => ({
   );
 };
 
-export default ServicesSection
+export default ServicesSection;

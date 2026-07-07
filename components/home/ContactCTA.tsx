@@ -1,89 +1,179 @@
-"use client";
+'use client';
 
-import { useState } from 'react';
 import { motion } from 'framer-motion';
-import { Building2, CalendarDays, CheckCircle2, Mail, User } from 'lucide-react';
-import Button from '@/components/ui/Button';
+import { useState } from 'react';
+import { CheckCircle2, Mail, User, Send, Phone, MapPin, Clock } from 'lucide-react';
+import { Button } from '@/components/ui/Button';
 
 interface FormData {
     name: string;
     email: string;
-    company: string;
+    message: string;
 }
 
-const timeSlots = ['سه‌شنبه ۱۰:۰۰', 'چهارشنبه ۱۴:۳۰', 'پنجشنبه ۰۹:۰۰'];
+export const ContactCTA = () => {
+    const [formData, setFormData] = useState<FormData>({
+        name: '',
+        email: '',
+        message: ''
+    });
+    const [isSubmitting, setIsSubmitting] = useState(false);
+    const [isSuccess, setIsSuccess] = useState(false);
 
-export default function ContactCTA() {
-    const [formData, setFormData] = useState<FormData>({ name: '', email: '', company: '' });
-    const [selectedSlot, setSelectedSlot] = useState(timeSlots[0]);
-    const [submitted, setSubmitted] = useState(false);
+    const handleSubmit = async (e: React.FormEvent) => {
+        e.preventDefault();
+        setIsSubmitting(true);
 
-    const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
-        event.preventDefault();
-        setSubmitted(true);
+        // Simulate API call
+        await new Promise(resolve => setTimeout(resolve, 1500));
+
+        setIsSubmitting(false);
+        setIsSuccess(true);
+        setFormData({ name: '', email: '', message: '' });
+
+        setTimeout(() => setIsSuccess(false), 5000);
+    };
+
+    const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+        setFormData({ ...formData, [e.target.name]: e.target.value });
     };
 
     return (
-        <section id="contact" className="relative overflow-hidden bg-[#0d0d0d] py-24">
-            <div className="absolute left-1/2 top-0 h-[520px] w-[520px] -translate-x-1/2 rounded-full bg-[#eab308]/10 blur-[120px]" />
-            <div className="relative z-10 mx-auto grid max-w-7xl gap-10 px-6 lg:grid-cols-2 lg:items-center">
-                <motion.div initial={{ opacity: 0, x: 28 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }}>
-                    <p className="mb-4 text-xs uppercase tracking-[0.25em] text-[#eab308]">شروع همکاری</p>
-                    <h2 className="font-display mb-6 text-5xl font-black tracking-tight text-white md:text-7xl">جلسه مشاوره فنی رزرو کنید</h2>
-                    <p className="font-body mb-10 max-w-lg text-base leading-relaxed text-gray-300">نیاز محصول، محدودیت‌های فنی، اهداف بازار فارسی و معیارهای موفقیت را بررسی می‌کنیم و مسیر پیشنهادی را شفاف ارائه می‌دهیم.</p>
-                    <div className="grid gap-3 sm:grid-cols-3">
-                        {timeSlots.map((slot) => (
-                            <button key={slot} onClick={() => setSelectedSlot(slot)} className={`min-h-[48px] rounded-xl border px-4 py-3 text-sm font-semibold transition-all ${selectedSlot === slot ? 'border-[#eab308] bg-[#eab308] text-gray-900' : 'border-white/[0.08] bg-white/[0.03] text-gray-300 hover:border-white/[0.14]'}`} aria-pressed={selectedSlot === slot}>
-                                {slot}
-                            </button>
-                        ))}
-                    </div>
-                </motion.div>
-
-                <motion.div initial={{ opacity: 0, y: 28 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="rounded-3xl border border-white/[0.08] bg-white/[0.04] p-6 shadow-2xl backdrop-blur-xl md:p-8">
-                    {submitted ? (
-                        <div className="flex min-h-[420px] flex-col items-center justify-center text-center" aria-live="polite">
-                            <CheckCircle2 className="mb-6 h-16 w-16 text-[#eab308]" />
-                            <h3 className="font-display mb-3 text-3xl font-black text-white">درخواست ثبت شد</h3>
-                            <p className="max-w-sm text-sm leading-relaxed text-gray-300">دعوت‌نامه جلسه برای {selectedSlot} ارسال خواهد شد.</p>
-                            <Button onClick={() => setSubmitted(false)} variant="on-dark" className="mt-8">
-                                ثبت درخواست دیگر
-                            </Button>
+        <section className="relative py-20 md:py-28 overflow-hidden bg-linear-to-br from-indigo-900 via-purple-900 to-pink-900">
+            <div className="container-custom">
+                <div className="grid lg:grid-cols-2 gap-12 items-center">
+                    {/* Left Content */}
+                    <motion.div
+                        initial={{ opacity: 0, x: -30 }}
+                        whileInView={{ opacity: 1, x: 0 }}
+                        transition={{ duration: 0.6 }}
+                        viewport={{ once: true }}
+                        className="text-white"
+                    >
+                        <div className="inline-flex items-center gap-2 bg-white/10 backdrop-blur-sm px-4 py-2 rounded-full text-sm font-medium border border-white/10 mb-6">
+                            <CheckCircle2 className="w-4 h-4 text-emerald-400" />
+                            تماس با ما
                         </div>
-                    ) : (
-                        <form onSubmit={handleSubmit} className="space-y-5">
+
+                        <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold font-display leading-tight">
+                            آماده همکاری با
+                            <span className="bg-gradient-to-r from-amber-400 to-pink-400 bg-clip-text text-transparent block">
+                                تیم ما هستید؟
+                            </span>
+                        </h2>
+
+                        <p className="mt-4 text-lg text-white/70 leading-relaxed">
+                            با پر کردن فرم تماس، ما در اسرع وقت با شما تماس خواهیم گرفت.
+                            تیم ما آماده پاسخگویی به سوالات شماست.
+                        </p>
+
+                        <div className="mt-8 space-y-4">
+                            {[
+                                { icon: Phone, text: '۰۲۱-۱۲۳۴۵۶۷۸', label: 'تلفن' },
+                                { icon: Mail, text: 'info@noavaran.ir', label: 'ایمیل' },
+                                { icon: MapPin, text: 'تهران، خیابان ولیعصر', label: 'آدرس' },
+                                { icon: Clock, text: 'شنبه تا پنجشنبه ۹ الی ۱۸', label: 'ساعات کاری' },
+                            ].map((item, index) => (
+                                <motion.div
+                                    key={index}
+                                    initial={{ opacity: 0, x: -20 }}
+                                    whileInView={{ opacity: 1, x: 0 }}
+                                    transition={{ delay: 0.2 + index * 0.1 }}
+                                    className="flex items-center gap-3 text-white/60 hover:text-white/80 transition-colors"
+                                >
+                                    <div className="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center">
+                                        <item.icon className="w-5 h-5 text-indigo-400" />
+                                    </div>
+                                    <div>
+                                        <div className="text-sm">{item.text}</div>
+                                        <div className="text-xs text-white/30">{item.label}</div>
+                                    </div>
+                                </motion.div>
+                            ))}
+                        </div>
+                    </motion.div>
+
+                    {/* Right Form */}
+                    <motion.div
+                        initial={{ opacity: 0, x: 30 }}
+                        whileInView={{ opacity: 1, x: 0 }}
+                        transition={{ duration: 0.6, delay: 0.2 }}
+                        viewport={{ once: true }}
+                        className="bg-white/5 backdrop-blur-xl border border-white/10 rounded-3xl p-6 md:p-8"
+                    >
+                        <form onSubmit={handleSubmit} className="space-y-4">
                             <div>
-                                <label htmlFor="name" className="mb-2 block text-sm font-semibold text-white">نام و نام خانوادگی</label>
+                                <label className="block text-sm text-white/60 mb-1">نام و نام خانوادگی</label>
                                 <div className="relative">
-                                    <User className="pointer-events-none absolute right-4 top-1/2 h-5 w-5 -translate-y-1/2 text-gray-400" />
-                                    <input id="name" name="name" type="text" autoComplete="name" required value={formData.name} onChange={(event) => setFormData({ ...formData, name: event.target.value })} placeholder="علی رضایی" className="w-full rounded-xl border border-slate-700 bg-slate-800 py-4 pl-4 pr-12 text-white placeholder:text-gray-400 focus:border-[#eab308] focus:outline-none focus:ring-2 focus:ring-[#eab308]/40" />
+                                    <User className="absolute right-3 top-1/2 -translate-y-1/2 w-5 h-5 text-white/30" />
+                                    <input
+                                        type="text"
+                                        name="name"
+                                        value={formData.name}
+                                        onChange={handleChange}
+                                        required
+                                        className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 pr-11 text-white placeholder-white/30 focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-all"
+                                        placeholder="نام خود را وارد کنید"
+                                    />
                                 </div>
                             </div>
+
                             <div>
-                                <label htmlFor="email" className="mb-2 block text-sm font-semibold text-white">ایمیل کاری</label>
+                                <label className="block text-sm text-white/60 mb-1">ایمیل</label>
                                 <div className="relative">
-                                    <Mail className="pointer-events-none absolute right-4 top-1/2 h-5 w-5 -translate-y-1/2 text-gray-400" />
-                                    <input id="email" name="email" type="email" autoComplete="email" required value={formData.email} onChange={(event) => setFormData({ ...formData, email: event.target.value })} placeholder="team@company.com" dir="ltr" className="w-full rounded-xl border border-slate-700 bg-slate-800 py-4 pl-4 pr-12 text-left text-white placeholder:text-gray-400 focus:border-[#eab308] focus:outline-none focus:ring-2 focus:ring-[#eab308]/40" />
+                                    <Mail className="absolute right-3 top-1/2 -translate-y-1/2 w-5 h-5 text-white/30" />
+                                    <input
+                                        type="email"
+                                        name="email"
+                                        value={formData.email}
+                                        onChange={handleChange}
+                                        required
+                                        className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 pr-11 text-white placeholder-white/30 focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-all"
+                                        placeholder="ایمیل خود را وارد کنید"
+                                    />
                                 </div>
                             </div>
+
                             <div>
-                                <label htmlFor="company" className="mb-2 block text-sm font-semibold text-white">شرکت یا سازمان</label>
+                                <label className="block text-sm text-white/60 mb-1">پیام</label>
                                 <div className="relative">
-                                    <Building2 className="pointer-events-none absolute right-4 top-1/2 h-5 w-5 -translate-y-1/2 text-gray-400" />
-                                    <input id="company" name="company" type="text" required value={formData.company} onChange={(event) => setFormData({ ...formData, company: event.target.value })} placeholder="نام شرکت" className="w-full rounded-xl border border-slate-700 bg-slate-800 py-4 pl-4 pr-12 text-white placeholder:text-gray-400 focus:border-[#eab308] focus:outline-none focus:ring-2 focus:ring-[#eab308]/40" />
+                                    <textarea
+                                        name="message"
+                                        value={formData.message}
+                                        onChange={handleChange}
+                                        required
+                                        rows={4}
+                                        className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white placeholder-white/30 focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-all resize-none"
+                                        placeholder="پیام خود را وارد کنید"
+                                    />
                                 </div>
                             </div>
-                            <div className="rounded-2xl border border-white/[0.08] bg-[#080808] p-4">
-                                <p className="text-xs uppercase tracking-widest text-gray-400">زمان انتخاب‌شده</p>
-                                <p className="mt-2 text-lg font-bold text-white">{selectedSlot}</p>
-                            </div>
-                            <Button type="submit" variant="on-dark" size="lg" className="w-full">
-                                <CalendarDays className="h-5 w-5" /> رزرو جلسه مشاوره
+
+                            <Button
+                                type="submit"
+                                variant="gradient"
+                                className="w-full bg-linear-to-r from-indigo-600 to-purple-600 text-white py-3 text-lg"
+                                loading={isSubmitting}
+                                icon={<Send className="w-5 h-5" />}
+                                iconPosition="left"
+                            >
+                                {isSubmitting ? 'در حال ارسال...' : 'ارسال پیام'}
                             </Button>
+
+                            {isSuccess && (
+                                <motion.div
+                                    initial={{ opacity: 0, y: 10 }}
+                                    animate={{ opacity: 1, y: 0 }}
+                                    className="flex items-center gap-2 text-emerald-400 text-sm bg-emerald-400/10 px-4 py-2 rounded-lg"
+                                >
+                                    <CheckCircle2 className="w-4 h-4" />
+                                    پیام شما با موفقیت ارسال شد
+                                </motion.div>
+                            )}
                         </form>
-                    )}
-                </motion.div>
+                    </motion.div>
+                </div>
             </div>
         </section>
     );
-}
+};

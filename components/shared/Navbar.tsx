@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import Link from 'next/link';
-import Button from '@/components/ui/Button';
+import { Button } from '@/components/ui/Button';
 
 interface NavLink {
     label: string;
@@ -20,23 +20,43 @@ export default function Navbar({ logo, links, ctaText, ctaHref }: NavbarProps) {
     const [open, setOpen] = useState(false);
 
     return (
-        <nav className="fixed top-0 left-0 right-0 z-50 border-b border-white/[0.06] bg-[#0a0a0a]/80 backdrop-blur-xl" aria-label="ناوبری اصلی">
+        <nav 
+            className="fixed top-0 left-0 right-0 z-50 border-b border-white/[0.06] bg-[#0a0a0a]/80 backdrop-blur-xl" 
+            aria-label="ناوبری اصلی"
+        >
             <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-6">
+                {/* Logo */}
                 <Link href="/" className="shrink-0 text-base font-black tracking-tight text-white md:text-lg">
                     {logo}
                 </Link>
+
+                {/* Desktop Navigation */}
                 <div className="hidden items-center gap-8 md:flex">
                     {links.map((link) => (
-                        <Link key={link.href} href={link.href} className="text-sm text-white/50 transition-colors duration-200 hover:text-white">
+                        <Link 
+                            key={link.href} 
+                            href={link.href} 
+                            className="text-sm text-white/50 transition-colors duration-200 hover:text-white"
+                        >
                             {link.label}
                         </Link>
                     ))}
                 </div>
+
+                {/* Desktop CTA Button - ✅ Wrapped in Link */}
                 <div className="hidden md:block">
-                    <Button href={ctaHref} variant="on-dark" size="sm">
-                        {ctaText}
-                    </Button>
+                    <Link href={ctaHref}>
+                        <Button 
+                            variant="gradient"
+                            size="sm"
+                            className="bg-gradient-to-r from-indigo-600 to-purple-600 text-white hover:from-indigo-500 hover:to-purple-500"
+                        >
+                            {ctaText}
+                        </Button>
+                    </Link>
                 </div>
+
+                {/* Mobile Menu Button */}
                 <button
                     onClick={() => setOpen(!open)}
                     className="min-h-[44px] min-w-[44px] p-2 text-white/70 transition-colors hover:text-white md:hidden"
@@ -57,16 +77,30 @@ export default function Navbar({ logo, links, ctaText, ctaHref }: NavbarProps) {
                     )}
                 </button>
             </div>
+
+            {/* Mobile Menu */}
             {open && (
                 <div className="flex flex-col gap-5 border-t border-white/[0.06] bg-[#0a0a0a]/95 px-6 py-5 backdrop-blur-xl md:hidden">
                     {links.map((link) => (
-                        <Link key={link.href} href={link.href} className="text-sm text-white/50 transition-colors duration-200 hover:text-white" onClick={() => setOpen(false)}>
+                        <Link 
+                            key={link.href} 
+                            href={link.href} 
+                            className="text-sm text-white/50 transition-colors duration-200 hover:text-white" 
+                            onClick={() => setOpen(false)}
+                        >
                             {link.label}
                         </Link>
                     ))}
-                    <Button href={ctaHref} variant="on-dark" size="sm" className="w-fit">
-                        {ctaText}
-                    </Button>
+                    {/* ✅ Mobile CTA Button wrapped in Link */}
+                    <Link href={ctaHref} className="w-fit">
+                        <Button 
+                            variant="gradient"
+                            size="sm" 
+                            className="w-fit bg-gradient-to-r from-indigo-600 to-purple-600 text-white hover:from-indigo-500 hover:to-purple-500"
+                        >
+                            {ctaText}
+                        </Button>
+                    </Link>
                 </div>
             )}
         </nav>
